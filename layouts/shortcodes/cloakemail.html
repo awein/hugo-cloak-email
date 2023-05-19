@@ -8,7 +8,7 @@
 {{- $domain := (index $parts 1) | default "" -}}
 {{- $query := .Get "query" | default "" -}}
 {{/* Compute md5 fingerprint */}}
-{{- $fingerprint := md5 (print $address $protocol (index (seq 999 | shuffle) 0)) | truncate 8 "" -}}
+{{- $fingerprint := md5 (print $address $protocol .Page.Title) | truncate 8 "" -}}
 {{/* Set via CSS what is displayed when Javascript is disabled. Query is never displayed */}}
 <style>
   #span-{{ $fingerprint }}.cloaked-e-mail:before {
