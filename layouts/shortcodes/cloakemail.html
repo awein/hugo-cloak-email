@@ -27,13 +27,14 @@
     {{- if ne $protocol "plain" }}
   link.href = {{ $protocol }} + ":" + address;
     {{- end -}}
+  {{- with $displaytext }}
   link.innerText = {{ $displaytext }};
-  {{ else }}
+  {{- else }}
   link.innerText = address.split('?')[0];
-  {{ end }}
-  {{ with $class }}
+  {{- end }}
+  {{- with $class }}
   link.className = "{{ $class }}";
-  {{ end }}
+  {{- end }}
   scriptTag.parentElement.insertBefore(link, scriptTag.previousElementSibling);
   scriptTag.parentElement.removeChild(scriptTag.previousElementSibling)
 </script>
