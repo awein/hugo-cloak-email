@@ -1,6 +1,7 @@
 {{/* Get address, protocol and other parameters */}}
 {{- $address := .Get "address" | default (.Get 0) -}}
 {{- $protocol := .Get "protocol" | default "mailto" -}}
+{{- $tag := (cond (ne $protocol "plain") "a" "span") -}}
 {{- $class := .Get "class" -}}
 {{- $displaytext := .Get "display" -}}
 {{- $parts := split $address "@" -}}
@@ -21,10 +22,11 @@
 {{/* Alter display with Javascript by changing DOM */}}
 <script id="script-{{ $fingerprint }}">
   var scriptTag = document.getElementById("script-{{ $fingerprint }}");
-  var link = document.createElement("a");
+  var link = document.createElement("{{ $tag }}");
   var address = "{{ range $index := seq (sub (len $user) 1) 0}}{{ substr $user $index 1}}{{ end }}".split('').reverse().join(''){{ with $domain }} + "@" + "{{ range $index := seq (sub (len $domain) 1) 0}}{{ substr $domain $index 1}}{{ end }}".split('').reverse().join(''){{ with $query }} + "?" + "{{ range $index := seq (sub (len $query) 1) 0}}{{ substr $query $index 1}}{{ end }}".split('').reverse().join(''){{ end }}{{ end }};
+    {{- if ne $protocol "plain" }}
   link.href = {{ $protocol }} + ":" + address;
-  {{ with $displaytext }}
+    {{- end -}}
   link.innerText = {{ $displaytext }};
   {{ else }}
   link.innerText = address.split('?')[0];
